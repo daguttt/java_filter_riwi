@@ -6,11 +6,11 @@ public class Course {
 
     public Course(int id, String name) {
         this.id = id;
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public Course(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public int getId() {

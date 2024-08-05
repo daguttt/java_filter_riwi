@@ -1,11 +1,15 @@
 package org.example;
 
+import org.example.controllers.CoursesController;
 import org.example.controllers.EnrollmentsController;
 import org.example.controllers.StudentsController;
+import org.example.entities.Course;
 import org.example.entities.Enrollment;
 import org.example.entities.Student;
+import org.example.models.CoursesModel;
 import org.example.models.EnrollmentsModel;
 import org.example.models.StudentsModel;
+import org.example.models.interfaces.ICoursesModel;
 import org.example.models.interfaces.IEnrollmentsModel;
 import org.example.models.interfaces.IStudentsModel;
 import org.example.persistence.Database;
@@ -34,10 +38,12 @@ public class Main {
         // Models
         IStudentsModel studentsModel = new StudentsModel(database);
         IEnrollmentsModel enrollmentsModel = new EnrollmentsModel(database);
+        ICoursesModel coursesModel = new CoursesModel(database);
 
         // Controller
         var studentsController = new StudentsController(studentsModel);
         var enrollmentsController = new EnrollmentsController(enrollmentsModel);
+        var coursesController = new CoursesController(coursesModel);
 
         // -****************************
 
@@ -56,6 +62,13 @@ public class Main {
                     4. Buscar estudiante por id.
                     5. Buscar estudiante por correo electrónico.
                     6. Listar inscripciones de un estudiante.
+                    7. Crear curso.
+                    8. Eliminar curso.
+                    9. Listar cursos.
+                    10. Inscribir estudiante a un curso.
+                    11. Eliminar inscripción de un estudiante a un curso.
+                    12. Agregar calificación a un estudiante.
+                    13. Editar calificación.
 
                     ************************************************
                     """;
@@ -71,6 +84,10 @@ public class Main {
                 case "4" -> showStudentById(studentsController);
                 case "5" -> showStudentByEmail(studentsController);
                 case "6" -> listStudentEnrollments(studentsController, enrollmentsController);
+                case "7" -> createCourse(coursesController);
+                case "8" -> deleteCourse(coursesController);
+                case "9" -> listCourses(coursesController);
+                case "10" -> enrollStudentInACourse(enrollmentsController);
                 default -> JOptionPane.showMessageDialog(null, "Opción inválida. Inténtalo de nuevo");
             }
         }
@@ -87,7 +104,7 @@ public class Main {
             return;
         }
 
-        // Otherwise register user
+        // Otherwise register student
         var student = new Student(fullname, email);
         var registeredStudent = studentsController.register(student);
         JOptionPane.showMessageDialog(null, "¡Estudiante registrado con éxito!\n\n" + registeredStudent);
@@ -194,4 +211,57 @@ public class Main {
 
     }
 
+    public static void createCourse(CoursesController coursesController) {
+        var name = InputRequester.requestString("Ingresa el nombre del curso");
+
+        // Check course name availability
+        var foundCourse = coursesController.findByName(name);
+        if (foundCourse.isPresent()) {
+            JOptionPane.showMessageDialog(null, "Ya existe un curso creado con el nombre " + name);
+            return;
+        }
+
+        // Otherwise create course
+        var course = new Course(name);
+        var createdCourse = coursesController.create(course);
+        JOptionPane.showMessageDialog(null, "¡Curso creado con éxito!\n\n" + createdCourse);
+
+    }
+
+    public static void deleteCourse(CoursesController coursesController) {
+        var name = InputRequester.requestString("Ingresa el nombre del curso a eliminar");
+
+        // Find course
+        var foundCourse = coursesController.findByName(name);
+        if (foundCourse.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No existe ningún curso con el nombre: " + name);
+            return;
+        }
+
+        boolean couldDeleteCourse = coursesController.delete(foundCourse.get().getId());
+
+        if (couldDeleteCourse) {
+            String successMessage = String.format("¡Curso '%s' eliminado con éxito!", foundCourse.get().getName());
+            JOptionPane.showMessageDialog(null, successMessage);
+        } else
+            JOptionPane.showMessageDialog(null, "Error al eliminar el curso.");
+
+    }
+
+    public static void listCourses(CoursesController coursesController) {
+        var courseList = coursesController.findAll();
+
+        if (courseList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay cursos creados en el momento.");
+            return;
+        }
+
+        var coursesAsListString = courseList.stream().map(Course::toString).toList();
+        var courseListMessage = String.join("\n--------------\n", coursesAsListString);
+        JOptionPane.showMessageDialog(null, courseListMessage);
+    }
+
+    public static void enrollStudentInACourse(EnrollmentsController enrollmentsController) {
+
+    }
 }

@@ -98,10 +98,10 @@ public class StudentsModel implements IStudentsModel {
 
             while (resultSet.next()) {
                 var id = resultSet.getInt("id");
-                var name = resultSet.getString("fullname");
+                var fullname = resultSet.getString("fullname");
                 var email = resultSet.getString("email");
                 var isActive = resultSet.getBoolean("is_active");
-                var student = new Student(id, name, email, isActive);
+                var student = new Student(id, fullname, email, isActive);
                 studentList.add(student);
             }
             resultSet.close();
@@ -159,10 +159,10 @@ public class StudentsModel implements IStudentsModel {
             var resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 var id = resultSet.getInt("id");
-                var name = resultSet.getString("fullname");
+                var fullname = resultSet.getString("fullname");
                 var email = resultSet.getString("email");
                 var isActive = resultSet.getBoolean("is_active");
-                student = Optional.of(new Student(id, name, email, isActive));
+                student = Optional.of(new Student(id, fullname, email, isActive));
             }
             resultSet.close();
         } catch (SQLException e) {
