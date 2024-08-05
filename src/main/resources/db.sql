@@ -28,7 +28,7 @@ CREATE TABLE enrollments(
 CREATE TABLE grades(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     grade INT NOT NULL,
-    type ENUM('quiz', 'workshop', 'test') NOT NULL,
+    type ENUM('QUIZ', 'WORKSHOP', 'ASSESSMENT') NOT NULL,
     description VARCHAR(255) NOT NULL,
     student_id INT NOT NULL,
     course_id INT NOT NULL,
