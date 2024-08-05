@@ -8,7 +8,7 @@ CREATE TABLE students(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
-    isActive BOOLEAN DEFAULT true
+    is_active BOOLEAN DEFAULT true
 );
 
 CREATE TABLE courses(
