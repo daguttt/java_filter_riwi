@@ -2,25 +2,25 @@ package org.example.entities;
 
 public class Student {
     private int id;
-    private String name;
+    private String fullName;
     private String email;
     private boolean isActive;
 
-    public Student(int id, String name, String email, boolean isActive) {
+    public Student(int id, String fullName, String email, boolean isActive) {
         this.id = id;
-        this.name = name;
+        this.fullName = fullName;
         this.email = email;
         this.isActive = isActive;
     }
 
-    public Student(String name, String email, boolean isActive) {
-        this.name = name;
+    public Student(String fullName, String email, boolean isActive) {
+        this.fullName = fullName;
         this.email = email;
         this.isActive = isActive;
     }
 
-    public Student(String name, String email) {
-        this.name = name;
+    public Student(String fullName, String email) {
+        this.fullName = fullName;
         this.email = email;
         this.isActive = true;
     }
@@ -33,12 +33,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -61,9 +61,9 @@ public class Student {
     public String toString() {
         var lines = new String[] {
                 String.format("ID: %d", getId()),
-                String.format("Nombre: %s", getName()),
+                String.format("Nombre completo: %s", getFullName()),
                 String.format("Email: %s", getEmail()),
-                String.format("¿Activo?: %s", isActive() ? "sí": "no"),
+                String.format("¿Activo?: %s", isActive() ? "Sí": "No"),
         };
         return String.join("\n", lines);
     }
