@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IStudentsModel {
     Student register(Student baseStudent);
     boolean update(int studentId, Student studentToUpdate);
-    List<Student> findAll();
+    List<Student> findAllActive();
     Optional<Student> findById(int studentId);
     Optional<Student> findByEmail(String studentEmail);
 }

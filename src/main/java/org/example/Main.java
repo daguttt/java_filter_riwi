@@ -1,8 +1,12 @@
 package org.example;
 
+import org.example.controllers.EnrollmentsController;
 import org.example.controllers.StudentsController;
+import org.example.entities.Enrollment;
 import org.example.entities.Student;
+import org.example.models.EnrollmentsModel;
 import org.example.models.StudentsModel;
+import org.example.models.interfaces.IEnrollmentsModel;
 import org.example.models.interfaces.IStudentsModel;
 import org.example.persistence.Database;
 import org.example.utils.InputRequester;
@@ -29,9 +33,11 @@ public class Main {
 
         // Models
         IStudentsModel studentsModel = new StudentsModel(database);
+        IEnrollmentsModel enrollmentsModel = new EnrollmentsModel(database);
 
         // Controller
         var studentsController = new StudentsController(studentsModel);
+        var enrollmentsController = new EnrollmentsController(enrollmentsModel);
 
         // -****************************
 
@@ -61,7 +67,10 @@ public class Main {
                 case "0" -> isMenuOpened = false;
                 case "1" -> registerStudent(studentsController);
                 case "2" -> editStudent(studentsController);
-                case "3" -> listStudents(studentsController);
+                case "3" -> listActiveStudents(studentsController);
+                case "4" -> showStudentById(studentsController);
+                case "5" -> showStudentByEmail(studentsController);
+                case "6" -> listStudentEnrollments(studentsController, enrollmentsController);
                 default -> JOptionPane.showMessageDialog(null, "Opción inválida. Inténtalo de nuevo");
             }
         }
@@ -81,7 +90,7 @@ public class Main {
         // Otherwise register user
         var student = new Student(fullname, email);
         var registeredStudent = studentsController.register(student);
-        JOptionPane.showMessageDialog(null, "¡Estudiante registrado con éxito!\n" + registeredStudent);
+        JOptionPane.showMessageDialog(null, "¡Estudiante registrado con éxito!\n\n" + registeredStudent);
 
     }
 
@@ -121,6 +130,68 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Error al editar el estudiante");
     }
 
-    public static void listStudents(StudentsController studentsController) {
+    public static void listActiveStudents(StudentsController studentsController) {
+        var studentList = studentsController.findAll();
+
+        if (studentList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay estudiantes activos en el momento.");
+            return;
+        }
+
+        var studentsAsListString = studentList.stream().map(Student::toString).toList();
+        var studentListMessage = String.join("\n--------------\n", studentsAsListString);
+        JOptionPane.showMessageDialog(null, studentListMessage);
     }
+
+    public static void showStudentById(StudentsController studentsController) {
+        var studentId = InputRequester.requestInteger("Ingresa el ID del estudiante que quieres buscar");
+
+        if (studentId.isEmpty()) throw new RuntimeException("Student id empty after requesting");
+
+        var foundStudent = studentsController.findById(studentId.get());
+        if (foundStudent.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Estudiante con email " + studentId + " no encontrado.");
+            return;
+        }
+
+        String successMessage = String.format("Se encontró un estudiante con el ID '%d'%n%n%s", studentId.get(), foundStudent.get());
+        JOptionPane.showMessageDialog(null, successMessage);
+
+    }
+
+    public static void showStudentByEmail(StudentsController studentsController) {
+        var studentEmail = InputRequester.requestString("Ingresa el email del estudiante que quieres buscar");
+
+        var foundStudent = studentsController.findByEmail(studentEmail);
+        if (foundStudent.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Estudiante con email " + studentEmail + " no encontrado.");
+            return;
+        }
+
+        String successMessage = String.format("Se encontró un estudiante con el email '%s'%n%n%s", studentEmail, foundStudent.get());
+        JOptionPane.showMessageDialog(null, successMessage);
+    }
+
+    public static void listStudentEnrollments(StudentsController studentsController, EnrollmentsController enrollmentsController) {
+        // Find student to show enrollments
+        var studentEmail = InputRequester.requestString("Ingresa el email del estudiante");
+        var foundStudent = studentsController.findByEmail(studentEmail);
+        if (foundStudent.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Estudiante con email " + studentEmail + " no encontrado.");
+            return;
+        }
+
+        // Find student enrollments
+        var enrollmentList = enrollmentsController.findAllByStudentId(foundStudent.get().getId());
+        if (enrollmentList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay estudiantes activos en el momento.");
+            return;
+        }
+
+        var enrollmentsAsListString = enrollmentList.stream().map(Enrollment::toString).toList();
+        var enrollmentListMessage = String.join("\n--------------\n", enrollmentsAsListString);
+        JOptionPane.showMessageDialog(null, enrollmentListMessage);
+
+    }
+
 }

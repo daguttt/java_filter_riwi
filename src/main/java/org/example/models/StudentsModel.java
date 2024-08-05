@@ -6,6 +6,7 @@ import org.example.persistence.Database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,8 +83,36 @@ public class StudentsModel implements IStudentsModel {
     }
 
     @Override
-    public List<Student> findAll() {
-        return null;
+    public List<Student> findAllActive() {
+        var connection = database.openConnection();
+        var sql = """
+                SELECT id, fullname, email, is_active\s
+                FROM students WHERE is_active = true;
+                """;
+
+        var studentList = new ArrayList<Student>();
+
+        try (var statement = connection.createStatement()) {
+
+            var resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                var id = resultSet.getInt("id");
+                var name = resultSet.getString("fullname");
+                var email = resultSet.getString("email");
+                var isActive = resultSet.getBoolean("is_active");
+                var student = new Student(id, name, email, isActive);
+                studentList.add(student);
+            }
+            resultSet.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        database.closeConnection();
+        return studentList.stream().toList();
+
     }
 
     @Override

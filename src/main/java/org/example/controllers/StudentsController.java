@@ -3,6 +3,7 @@ package org.example.controllers;
 import org.example.entities.Student;
 import org.example.models.interfaces.IStudentsModel;
 
+import java.util.List;
 import java.util.Optional;
 
 public class StudentsController {
@@ -16,6 +17,10 @@ public class StudentsController {
 
     public Student register(Student baseStudent) {
         return this.studentsModel.register(baseStudent);
+    }
+
+    public List<Student> findAll() {
+        return this.studentsModel.findAllActive();
     }
 
     public Optional<Student> findByEmail(String studentEmail) {
