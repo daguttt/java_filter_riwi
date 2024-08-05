@@ -6,7 +6,7 @@ USE riwi_academy_db;
 
 CREATE TABLE students(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(150) NOT NULL,
+    fullname VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     is_active BOOLEAN DEFAULT true
 );
