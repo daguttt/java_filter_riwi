@@ -78,6 +78,7 @@ public class Main {
                     11. Eliminar inscripción de un estudiante a un curso.
                     12. Agregar calificación a un estudiante.
                     13. Editar calificación.
+                    14. Listar calificaciones de un estudiante de un curso
 
                     ************************************************
                     """;
