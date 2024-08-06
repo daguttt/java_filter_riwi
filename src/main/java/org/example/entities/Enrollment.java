@@ -61,7 +61,7 @@ public class Enrollment {
                 String.format("ID Estudiante: %s", getStudentId()),
                 String.format("ID Curso: %s", getCourseId()),
         };
-        return String.join("\n", lines);
+        return "Inscripción:\n" + String.join("\n", lines);
 
     }
 }

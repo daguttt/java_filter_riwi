@@ -131,4 +131,32 @@ public class CoursesModel implements ICoursesModel {
         return courseList.stream().toList();
 
     }
+
+    @Override
+    public Optional<Course> findById(int courseIdQuery) {
+        var connection = database.openConnection();
+        var sql = """
+                SELECT id, name\s
+                FROM courses WHERE id = ?
+                """;
+
+        Optional<Course> course = Optional.empty();
+        try(var statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, courseIdQuery);
+
+            var resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                var id = resultSet.getInt("id");
+                var name = resultSet.getString("name");
+                course = Optional.of(new Course(id, name));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        database.closeConnection();
+        return course;
+
+    }
 }

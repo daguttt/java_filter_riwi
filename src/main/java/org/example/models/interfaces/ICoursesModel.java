@@ -13,4 +13,6 @@ public interface ICoursesModel {
     boolean delete(int courseId);
 
     List<Course> findAll();
+
+    Optional<Course> findById(int courseIdQuery);
 }

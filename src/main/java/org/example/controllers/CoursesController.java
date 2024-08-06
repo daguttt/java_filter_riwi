@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CoursesController {
-    private ICoursesModel coursesModel;
+    private final ICoursesModel coursesModel;
 
     public CoursesController(ICoursesModel coursesModel) {
         this.coursesModel = coursesModel;
@@ -29,4 +29,7 @@ public class CoursesController {
         return this.coursesModel.findAll();
     }
 
+    public Optional<Course> findById(int courseIdQuery) {
+        return this.coursesModel.findById(courseIdQuery);
+    }
 }

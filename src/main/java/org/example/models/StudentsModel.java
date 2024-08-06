@@ -138,9 +138,10 @@ public class StudentsModel implements IStudentsModel {
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
         }
 
-        database.closeConnection();
         return student;
     }
 

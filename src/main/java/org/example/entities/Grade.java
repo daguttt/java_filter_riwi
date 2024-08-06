@@ -7,23 +7,23 @@ public class Grade {
     private int grade;
     private String description;
     private GradeType type;
-    private int userId;
+    private int studentId;
     private int courseId;
 
-    public Grade(int id, int grade, String description, GradeType type, int userId, int courseId) {
+    public Grade(int id, int grade, String description, GradeType type, int studentId, int courseId) {
         this.id = id;
         this.grade = grade;
         this.description = description;
         this.type = type;
-        this.userId = userId;
+        this.studentId = studentId;
         this.courseId = courseId;
     }
 
-    public Grade(int grade, String description, GradeType type, int userId, int courseId) {
+    public Grade(int grade, String description, GradeType type, int studentId, int courseId) {
         this.grade = grade;
         this.description = description;
         this.type = type;
-        this.userId = userId;
+        this.studentId = studentId;
         this.courseId = courseId;
     }
 
@@ -59,12 +59,12 @@ public class Grade {
         this.type = type;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
     public int getCourseId() {
@@ -82,7 +82,7 @@ public class Grade {
                 String.format("Calificacion: %d", getGrade()),
                 String.format("Descripción: %s", getDescription()),
                 String.format("Tipo de calificación: %s", getType().name().toLowerCase()),
-                String.format("ID Estudiante: %s", getUserId()),
+                String.format("ID Estudiante: %s", getStudentId()),
                 String.format("ID Curso: %s", getCourseId()),
         };
         return String.join("\n", lines);
